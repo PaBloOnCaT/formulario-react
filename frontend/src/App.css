@@ -1,0 +1,33 @@
+.contenedor {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.titulos {
+    margin: 0 0 10px 0;
+    font-size: 22px;
+}
+
+table {
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 5px 10px;
+}
+
+.acciones button {
+    margin-right: 6px;
+}
+
+.campo-tipo:focus { background: #15e4ff; }
+.campo-codigo:focus { background: #3c8500; }
+.campo-nombre:focus { background: #aca4ff; }
+.campo-raza:focus { background: #fbb2ff; }
+.campo-dueno:focus { background: #ff3c76; }
+.campo-ciudad:focus { background: #a39599; }
+.campo-fecha:focus { background: #2b3b97; }
+.campo-correo:focus { background: #fce93c; }
+.campo-telefono:focus { background: #ca7c28; }
