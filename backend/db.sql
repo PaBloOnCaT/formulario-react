@@ -1,16 +1,17 @@
 CREATE DATABASE IF NOT EXISTS formulario;
 USE formulario;
 
-CREATE TABLE IF NOT EXISTS usuarios (
+-- Sequelize crea esta tabla solo (sync), este script es opcional
+CREATE TABLE IF NOT EXISTS personas (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  tipo VARCHAR(50) NOT NULL,
-  codigoChip VARCHAR(50) NOT NULL,
-  nombre VARCHAR(100),
-  raza VARCHAR(100),
-  dueno VARCHAR(100),
+  documento VARCHAR(50) NOT NULL,
+  numeroDocumento VARCHAR(50) NOT NULL,
+  name VARCHAR(100),
+  lastName VARCHAR(100),
+  address VARCHAR(150),
   ciudad VARCHAR(50),
-  fechaNacimiento DATE NULL,
+  birthday DATE NULL,
   correo VARCHAR(100),
-  telefono VARCHAR(20),
-  UNIQUE KEY mascota_unica (tipo, codigoChip)
+  celular VARCHAR(20),
+  UNIQUE KEY persona_unica (documento, numeroDocumento)
 );

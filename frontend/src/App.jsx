@@ -1,35 +1,35 @@
 import { useState, useEffect } from 'react'
 
-const API_URL = 'http://localhost:3000/usuarios'
+const API_URL = 'http://localhost:3000/personas'
 
 const formularioInicial = {
-  tipo: 'Seleccione',
-  codigoChip: '',
-  nombre: '',
-  raza: '',
-  dueno: '',
+  documento: 'Seleccione',
+  numeroDocumento: '',
+  name: '',
+  lastName: '',
+  address: '',
   ciudad: 'Seleccione',
-  fechaNacimiento: '',
+  birthday: '',
   correo: '',
-  telefono: ''
+  celular: ''
 }
 
 function App() {
-  const [mascotas, setMascotas] = useState([])
+  const [personas, setPersonas] = useState([])
   const [formulario, setFormulario] = useState(formularioInicial)
   const [idEditar, setIdEditar] = useState(null)
 
   useEffect(() => {
-    obtenerMascotas()
+    obtenerPersonas()
   }, [])
 
-  async function obtenerMascotas() {
+  async function obtenerPersonas() {
     try {
       const respuesta = await fetch(API_URL)
       const datos = await respuesta.json()
-      setMascotas(datos)
+      setPersonas(datos)
     } catch (error) {
-      alert("No se pudo conectar con el backend. Revisa que este corriendo (npm start) y que MySQL este encendido.")
+      alert('No se pudo conectar con el backend. Revisa que este corriendo (npm start) y que MySQL este encendido.')
     }
   }
 
@@ -53,8 +53,8 @@ function App() {
   }
 
   function validar() {
-    if (formulario.tipo === 'Seleccione' || formulario.codigoChip === '') {
-      alert('Debe seleccionar el tipo y escribir el codigo')
+    if (formulario.documento === 'Seleccione' || formulario.numeroDocumento === '') {
+      alert('Debe seleccionar el tipo de documento y escribir el numero de documento')
       return false
     }
     return true
@@ -63,12 +63,12 @@ function App() {
   async function handleGuardar() {
     if (!validar()) return
 
-    const existe = mascotas.some(
-      (m) => m.tipo === formulario.tipo && m.codigoChip === formulario.codigoChip
+    const existe = personas.some(
+      (p) => p.documento === formulario.documento && p.numeroDocumento === formulario.numeroDocumento
     )
 
     if (existe) {
-      alert('Esta mascota ya se encuentra registrada')
+      alert('Ya existe una persona con ese documento')
       return
     }
 
@@ -86,23 +86,23 @@ function App() {
       return
     }
 
-    await obtenerMascotas()
+    await obtenerPersonas()
     limpiarFormulario()
   }
 
-  function handleEditar(mascota) {
+  function handleEditar(persona) {
     setFormulario({
-      tipo: mascota.tipo,
-      codigoChip: mascota.codigoChip,
-      nombre: mascota.nombre,
-      raza: mascota.raza,
-      dueno: mascota.dueno,
-      ciudad: mascota.ciudad,
-      fechaNacimiento: mascota.fechaNacimiento,
-      correo: mascota.correo,
-      telefono: mascota.telefono
+      documento: persona.documento,
+      numeroDocumento: persona.numeroDocumento,
+      name: persona.name || '',
+      lastName: persona.lastName || '',
+      address: persona.address || '',
+      ciudad: persona.ciudad || 'Seleccione',
+      birthday: persona.birthday || '',
+      correo: persona.correo || '',
+      celular: persona.celular || ''
     })
-    setIdEditar(mascota.id)
+    setIdEditar(persona.id)
   }
 
   async function handleActualizar() {
@@ -123,15 +123,15 @@ function App() {
       return
     }
 
-    await obtenerMascotas()
+    await obtenerPersonas()
     limpiarFormulario()
   }
 
-  async function handleEliminar(mascota) {
-    const confirmar = window.confirm(`¿Seguro que desea eliminar a ${mascota.nombre}?`)
+  async function handleEliminar(persona) {
+    const confirmar = window.confirm(`¿Seguro que desea eliminar a ${persona.name} ${persona.lastName}?`)
     if (!confirmar) return
 
-    const respuesta = await fetch(`${API_URL}/${mascota.id}`, {
+    const respuesta = await fetch(`${API_URL}/${persona.id}`, {
       method: 'DELETE'
     })
 
@@ -141,8 +141,8 @@ function App() {
       return
     }
 
-    await obtenerMascotas()
-    if (idEditar === mascota.id) {
+    await obtenerPersonas()
+    if (idEditar === persona.id) {
       limpiarFormulario()
     }
   }
@@ -152,70 +152,69 @@ function App() {
       <div className="contenedor">
         <img src="/tdea.png" width="150" height="150" alt="Logo TDEA" />
         <div className="titulos">
-          <h1>Tecnológico de Antioquia I.U.</h1>
-          <h1>Clínica Veterinaria - Registro de Mascotas</h1>
+          <h1>Tecnológico de Antioquia - Institución Universitaria</h1>
+          <h1>Primer formulario</h1>
         </div>
       </div>
 
       <form id="formulario" onSubmit={(e) => e.preventDefault()}>
-        <label htmlFor="tipo">
-          Tipo de mascota
+        <label htmlFor="documento">
+          Tipo de documento
           <select
-            id="tipo"
-            className="campo-tipo"
-            value={formulario.tipo}
+            id="documento"
+            className="campo-documento"
+            value={formulario.documento}
             onChange={handleChange}
           >
             <option>Seleccione</option>
-            <option>Canino</option>
-            <option>Felino</option>
-            <option>Ave</option>
-            <option>Otro</option>
+            <option>Tarjeta de identidad</option>
+            <option>Cédula de ciudadanía</option>
+            <option>Cédula de extranjería</option>
           </select>
         </label>
 
         <br /><br />
 
-        <label htmlFor="codigoChip">Número de Chip</label>
+        <label htmlFor="numeroDocumento">Número de documento</label>
         <input
           type="text"
-          id="codigoChip"
-          className="campo-codigo"
-          value={formulario.codigoChip}
+          id="numeroDocumento"
+          className="campo-numero"
+          value={formulario.numeroDocumento}
           onChange={handleChange}
           onKeyPress={soloNumeros}
         />
 
         <br /><br />
 
-        <label htmlFor="nombre">Nombre de la mascota</label>
+        <label htmlFor="name">Nombres</label>
         <input
           type="text"
-          id="nombre"
+          id="name"
           className="campo-nombre"
-          value={formulario.nombre}
+          value={formulario.name}
           onChange={handleChange}
         />
 
         <br /><br />
 
-        <label htmlFor="raza">Raza</label>
+        <label htmlFor="lastName">Apellidos</label>
         <input
           type="text"
-          id="raza"
-          className="campo-raza"
-          value={formulario.raza}
+          id="lastName"
+          className="campo-apellido"
+          value={formulario.lastName}
           onChange={handleChange}
         />
 
         <br /><br />
 
-        <label htmlFor="dueno">Nombre del dueño</label>
+        <label htmlFor="address">Dirección</label>
         <input
           type="text"
-          id="dueno"
-          className="campo-dueno"
-          value={formulario.dueno}
+          id="address"
+          className="campo-direccion"
+          value={formulario.address}
           onChange={handleChange}
         />
 
@@ -230,25 +229,25 @@ function App() {
         >
           <option>Seleccione</option>
           <option>Medellín</option>
-          <option>Bello</option>
-          <option>Itagüí</option>
-          <option>Envigado</option>
+          <option>Bogotá</option>
+          <option>Cali</option>
+          <option>Cúcuta</option>
         </select>
 
         <br /><br />
 
-        <label htmlFor="fechaNacimiento">Fecha de nacimiento</label>
+        <label htmlFor="birthday">Fecha de nacimiento</label>
         <input
           type="date"
-          id="fechaNacimiento"
-          className="campo-fecha"
-          value={formulario.fechaNacimiento}
+          id="birthday"
+          className="campo-nacimiento"
+          value={formulario.birthday}
           onChange={handleChange}
         />
 
         <br /><br />
 
-        <label htmlFor="correo">Correo de contacto</label>
+        <label htmlFor="correo">Correo electrónico</label>
         <input
           type="email"
           id="correo"
@@ -259,12 +258,12 @@ function App() {
 
         <br /><br />
 
-        <label htmlFor="telefono">Teléfono</label>
+        <label htmlFor="celular">Celular</label>
         <input
           type="text"
-          id="telefono"
-          className="campo-telefono"
-          value={formulario.telefono}
+          id="celular"
+          className="campo-celular"
+          value={formulario.celular}
           onChange={handleChange}
           onKeyPress={soloNumeros}
         />
@@ -289,35 +288,35 @@ function App() {
       <table id="tablaDatos" border="1" cellPadding="5" cellSpacing="0">
         <thead>
           <tr>
-            <th>Tipo</th>
-            <th>Número Chip</th>
-            <th>Nombre</th>
-            <th>Raza</th>
-            <th>Dueño</th>
+            <th>Tipo Documento</th>
+            <th>Número de Documento</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Dirección</th>
             <th>Ciudad</th>
-            <th>Fecha Nacimiento</th>
-            <th>Correo</th>
-            <th>Teléfono</th>
+            <th>Fecha de nacimiento</th>
+            <th>Email</th>
+            <th>Celular</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tablaBody">
-          {mascotas.map((item) => (
-            <tr key={item.id}>
-              <td>{item.tipo}</td>
-              <td>{item.codigoChip}</td>
-              <td>{item.nombre}</td>
-              <td>{item.raza}</td>
-              <td>{item.dueno}</td>
-              <td>{item.ciudad}</td>
-              <td>{item.fechaNacimiento}</td>
-              <td>{item.correo}</td>
-              <td>{item.telefono}</td>
+          {personas.map((persona) => (
+            <tr key={persona.id}>
+              <td>{persona.documento}</td>
+              <td>{persona.numeroDocumento}</td>
+              <td>{persona.name}</td>
+              <td>{persona.lastName}</td>
+              <td>{persona.address}</td>
+              <td>{persona.ciudad}</td>
+              <td>{persona.birthday}</td>
+              <td>{persona.correo}</td>
+              <td>{persona.celular}</td>
               <td className="acciones">
-                <button type="button" onClick={() => handleEditar(item)}>
+                <button type="button" onClick={() => handleEditar(persona)}>
                   Actualizar
                 </button>
-                <button type="button" onClick={() => handleEliminar(item)}>
+                <button type="button" onClick={() => handleEliminar(persona)}>
                   Eliminar
                 </button>
               </td>

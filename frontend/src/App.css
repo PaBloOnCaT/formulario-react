@@ -22,12 +22,13 @@ th, td {
     margin-right: 6px;
 }
 
-.campo-tipo:focus { background: #15e4ff; }
-.campo-codigo:focus { background: #3c8500; }
+/* colores al hacer foco en cada campo */
+.campo-documento:focus { background: #15e4ff; }
+.campo-numero:focus { background: #3c8500; }
 .campo-nombre:focus { background: #aca4ff; }
-.campo-raza:focus { background: #fbb2ff; }
-.campo-dueno:focus { background: #ff3c76; }
+.campo-apellido:focus { background: #fbb2ff; }
+.campo-direccion:focus { background: #ff3c76; }
 .campo-ciudad:focus { background: #a39599; }
-.campo-fecha:focus { background: #2b3b97; }
+.campo-nacimiento:focus { background: #2b3b97; }
 .campo-correo:focus { background: #fce93c; }
-.campo-telefono:focus { background: #ca7c28; }
+.campo-celular:focus { background: #ca7c28; }
